@@ -80,6 +80,7 @@ public class BlackjackServlet extends HttpServlet {
 		}
 		
 		// GAME LOGIC TIME
+		gameInstance.testMode = 1;
 		ArrayList<ArrayList<String>> gameOutputs = gameInstance.runGameLogic(gameInputs[0], gameInputs[1], auxInputs);
 		System.out.println(gameOutputs);
 		String gameState = gameOutputs.get(0).get(0);
@@ -106,7 +107,7 @@ public class BlackjackServlet extends HttpServlet {
 					+ "<input type=\"hidden\" name=\"check\" value=\""+inputCheck+"\" />"
 					+ "<input type=\"hidden\" name=\"choice\" value=\"submit\" />"
 					+ "<input type=\"number\" name=\"betAmount\" min=\""+minBet+"\"  max=\""+maxBet+"\" value=\"5\" font-size=\"30px\" required >\r\n"
-					+ "<input type=\"submit\" value=\"Confirm Bet (awkward horizontal space)\">\r\n"
+					+ "<input type=\"submit\" value=\"Confirm Bet\">\r\n"
 					+ "</form>");
 			//gameboard = gameboard + cardUtils.generateTxt("Hi I couldn't kinda forgot how to <br> make the spinbox bigger so <br> it's just going to be up here okay?", new int[] {10,40}, "linkLarge");
 			gameboard = gameboard + drawChipCounter(gameOutputs.get(0).get(1),"???");

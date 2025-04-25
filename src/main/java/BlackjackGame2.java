@@ -158,6 +158,9 @@ public class BlackjackGame2{
 			  else if(lastTarget.equals("Double")){
 			  	lastPlayerAction = takePlayerAction("Double");;
 			  }
+			  else if(lastTarget.equals("Split")){
+				  	lastPlayerAction = takePlayerAction("Split");;
+				  }
 			  
 			  if(playerHand.getValue(deck) > 21 || lastPlayerAction == "Stand"){
 			    gameStateList = setGameState("resolvePlayer");
@@ -199,11 +202,23 @@ public class BlackjackGame2{
 		}
 		else if(gameState.equals("resolve")){
 			System.out.println(" GAME: RESOLVE state!");
-			gameStateList = setGameState("setup");
-		    gameStateList.add("none");
-			buttonParams.add(String.valueOf(Math.min(playerWallet, 5)));
-			buttonParams.add(String.valueOf(Math.min(playerWallet, 100)));
-		
+		      buttonParams.add(String.valueOf(Math.min(playerWallet, 5)));
+			if(splitCount == 0) { // reset to start
+			    gameStateList = setGameState("setup");
+		        gameStateList.add("none");
+			    buttonParams.add(String.valueOf(Math.min(playerWallet, 5)));
+			    buttonParams.add(String.valueOf(Math.min(playerWallet, 100)));
+			}
+			else
+			{
+			  gameStateList = setGameState("choice");
+		      gameStateList.add(String.valueOf(currentBet));
+			  String[] validButtons = getPlayerOptions();
+			  System.out.println(validButtons);
+			  for(int i = 0; i < validButtons.length; i++){
+				if(validButtons[i]!= null){buttonParams.add(validButtons[i]);}
+			  }
+			}
 		}
 		if(gameState.equals("dealer")){ // NOT supposed to be if else. I pretend to know what I am doing
 			System.out.println(" GAME: dealer state!");
@@ -229,6 +244,7 @@ public class BlackjackGame2{
 		  }
 		}
 		else{ // lastAction != click, treat as a refresh
+		    System.out.println(" GAME: Refresh!");
 	    	gameStateList = setGameState("reset");
 	        playerWallet = playerWalletInitial;
 	        deck = new CardDeck();
@@ -241,9 +257,13 @@ public class BlackjackGame2{
     	  gameStateList.add(gameState); // [0][0]
     	  gameStateList.add(String.valueOf(playerWallet)); // [0][1]
 		}
-		ArrayList<String> splitHandOut = new ArrayList<String>();
+		ArrayList<String> splitHandOut = new ArrayList<String>(); //[4][1..?]
 		splitHandOut.add(String.valueOf(splitCount)); //[4][0]
-		
+		if(splitCount > 0) {
+			for(int i = 0; i<(playerReserveHand.getCards().size());++i) {
+				splitHandOut.add(playerReserveHand.getCards().get(i));
+			}
+		}
     	outputs.add(gameStateList); // [0]
     	outputs.add(buttonParams); // [1]
     	outputs.add((ArrayList<String>)dealerHand.getCards()); // [2]
@@ -356,7 +376,7 @@ public class BlackjackGame2{
         boolean bothCardsMatch = (playerHand.getCards().get(0).split("Of")[0].equals(playerHand.getCards().get(1).split("Of")[0]));
         boolean canDouble = (playerWallet >= currentBet && playerHand.getCards().size() == 2);
         boolean canSplit = (playerWallet >= currentBet && playerHand.getCards().size() == 2 && bothCardsMatch);
-        String outputs[] = {"Hit","Stand",null,null};
+        String outputs[] = {"Stand","Hit",null,null};
         if(canDouble){ outputs[2] = "Double";}
         if(canSplit){ outputs[3] = "Split";}
         return outputs;
@@ -473,6 +493,7 @@ public class BlackjackGame2{
             determineSplitWinner(hand1, dealerHand, currentBet);*/
 
             // Play hand 2
+            /*
             System.out.println("\nHand 2:");
             hand2.addCard(deck.DrawCard());
             System.out.println("Hand 2: " + hand2 + " (Value: " + hand2.getValue(deck) + ")");
@@ -493,6 +514,7 @@ public class BlackjackGame2{
                 }
             }
             determineSplitWinner(hand2, dealerHand, currentBet);
+            */
         } else {
             System.out.println("Cannot split hand.");
         }
