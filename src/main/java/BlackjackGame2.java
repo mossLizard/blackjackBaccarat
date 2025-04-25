@@ -476,7 +476,28 @@ public class BlackjackGame2{
     }
 
     private String determineWinner(int bet) {
-    	return null;
+        int playerValue = playerHand.getValue(deck);
+        int dealerValue = dealerHand.getValue(deck);
+        if (playerValue > 21) {
+            System.out.println("Dealer wins!");
+            playerWallet -= bet;
+            return "dealerWin";
+        } else if (dealerValue > 21) {
+            System.out.println("You win!");
+            playerWallet += bet;
+            return "playerWin";
+        } else if (playerValue > dealerValue) {
+            System.out.println("You win!");
+            playerWallet += bet;
+            return "playerWin";
+        } else if (dealerValue > playerValue) {
+            System.out.println("Dealer wins!");
+            playerWallet -= bet;
+            return "dealerWin";
+        } else {
+            System.out.println("It's a push!");
+            return "push";
+        }
     }
 
     private void determineSplitWinner(Hand playerHand, Hand dealerHand, int bet) {

@@ -146,7 +146,10 @@ public class BlackjackServlet extends HttpServlet {
 			gameboard = gameboard + gimmeCardsHandsw(playerHand, dealerHand, gameOutputs);
 			String lastPlayerAction = gameOutputs.get(0).get(2);
 			bigOlText = "Unhandled Resolution!";
-			if(lastPlayerAction.equals("playerWin")) {bigOlText = "You have won! You have gained "+gameOutputs.get(0).get(5)+" chips.";}
+			if(lastPlayerAction == null) {
+				System.out.println("  DISPLAY: null LastPlayerAction!! What happen???");
+			}
+			else if(lastPlayerAction.equals("playerWin")) {bigOlText = "You have won! You have gained "+gameOutputs.get(0).get(5)+" chips.";}
 			else if(lastPlayerAction.equals("dealerWin")) {bigOlText = "The dealer won! You have lost "+gameOutputs.get(0).get(5)+" chips.";}
 			else  {bigOlText = "It's a tie! Your chips have remained unchanged.";} // just a catch-all I guess????
 			gameboard = gameboard + cardUtils.generateTxt("SplitCount: " + String.valueOf(gameInstance.splitCount), new int[] {0,-30}, "handSubtitle");
