@@ -316,74 +316,6 @@ public class BlackjackGame2{
           break;
         }
     }
-
-    public void startGame() {
-        while (playerWallet > 0) {
-            currentBet = getBet();
-            if (currentBet == 0) {
-                System.out.println("Thanks for playing!");
-                break;
-            }
-
-            deck = new CardDeck();
-            playerHand = new Hand();
-            dealerHand = new Hand();
-
-            // Initial deal
-            playerHand.addCard(deck.DrawCard());
-            dealerHand.addCard(deck.DrawCard());
-            playerHand.addCard(deck.DrawCard());
-            dealerHand.addCard(deck.DrawCard());
-
-            System.out.println("\nYour hand: " + playerHand + " (Value: " + playerHand.getValue(deck) + ")");
-            System.out.println("Dealer's first card: " + dealerHand.getCards().get(0));
-            System.out.println("Dealer's second card is facedown.");
-
-            // Player actions: Double Down, Split, Hit, Stand
-            playerActions();
-
-            // Dealer's turn if player didn't bust or split and bust
-            if (playerHand.getCards().size() > 0 && playerHand.getValue(deck) <= 21) {
-                dealerTurn();
-                determineWinner(currentBet);
-            }
-
-            System.out.println("\nYour current chip count: " + playerWallet);
-            if (playerWallet <= 0) {
-                System.out.println("You are out of chips! Game over.");
-            } else {
-                if (!playAgain()) {
-                    break;
-                }
-            }
-        }
-        System.out.println("Final chip count: " + playerWallet);
-    }
-
-    private int getBet() {
-        int playerBet = 0;
-        String validBet = "no";
-        while (!validBet.equals("yes")) {
-            System.out.println("How much would you like to bet? (min = 5, max = 100, or 0 to quit)");
-            try {
-                playerBet = scanner.nextInt();
-                if (playerBet == 0) {
-                    return 0;
-                } else if (playerBet >= 5 && playerBet <= 100 && playerBet <= playerWallet) {
-                    validBet = "yes";
-                } else if (playerBet > playerWallet) {
-                    System.out.println("Sorry, that bet amount exceeds the amount of chips you have.");
-                } else {
-                    System.out.println("Sorry, that bet is invalid.");
-                }
-            } catch (java.util.InputMismatchException e) {
-                System.out.println("Invalid input. Please enter a number.");
-                scanner.next();
-            }
-        }
-        return playerBet;
-    }
-    
     private String[] getPlayerOptions(){
         boolean bothCardsMatch = (playerHand.getCards().get(0).split("Of")[0].equals(playerHand.getCards().get(1).split("Of")[0]));
         boolean canDouble = (playerWallet >= currentBet && playerHand.getCards().size() == 2);
@@ -434,8 +366,6 @@ public class BlackjackGame2{
         } 
     return "InvalidAction";
     }
-
-    private void playerActions() {}
 
     private void splitHand() {
         if (playerHand.getCards().size() == 2 &&
@@ -498,35 +428,6 @@ public class BlackjackGame2{
             System.out.println("It's a push!");
             return "push";
         }
-    }
-
-    private void determineSplitWinner(Hand playerHand, Hand dealerHand, int bet) {
-        int playerValue = playerHand.getValue(deck);
-        int dealerValue = dealerHand.getValue(deck);
-
-        System.out.println("\nComparing hand: " + playerHand + " (Value: " + playerValue + ") with Dealer: " + dealerHand + " (Value: " + dealerValue + ")");
-
-        if (playerValue > 21) {
-            System.out.println("Hand busted!");
-            playerWallet -= bet;
-        } else if (dealerValue > 21) {
-            System.out.println("Hand wins!");
-            playerWallet += bet;
-        } else if (playerValue > dealerValue) {
-            System.out.println("Hand wins!");
-            playerWallet += bet;
-        } else if (dealerValue > playerValue) {
-            System.out.println("Dealer wins against hand!");
-            playerWallet -= bet;
-        } else {
-            System.out.println("Hand is a push!");
-        }
-    }
-
-    private boolean playAgain() {
-        System.out.println("\nDo you want to play another round? (yes/no)");
-        String playAgain = scanner.next().toLowerCase();
-        return playAgain.equals("yes");
     }
 }
 
