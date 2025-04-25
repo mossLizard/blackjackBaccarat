@@ -125,6 +125,8 @@ public class BlackjackServlet extends HttpServlet {
 			else if(lastPlayerAction.equals("DoubleSuccess")) {bigOlText = "You doubled down successfully! <br> It is now the dealer's turn.";}
 			else if(lastPlayerAction.equals("DoubleFailed")) {bigOlText = "You doubled down, but failed! <br> It is now the dealer's turn.";}
 			else if(lastPlayerAction.equals("Stand")) {bigOlText = "You stood. <br> It is now the dealer's turn";}
+			else if(lastPlayerAction.equals("Split")) {bigOlText = "You split your hand and added a new card to each half!";}
+			else if(lastPlayerAction.equals("Swap")) {bigOlText = "You swapped the split parts of your hands.";}
 			gameboard = gameboard + drawChipCounter(gameOutputs.get(0).get(1),gameOutputs.get(0).get(5));
 		}
 		else if(gameState.equals("dealer") || gameState.equals("resolveDealer")){
@@ -147,6 +149,8 @@ public class BlackjackServlet extends HttpServlet {
 			if(lastPlayerAction.equals("playerWin")) {bigOlText = "You have won! You have gained "+gameOutputs.get(0).get(5)+" chips.";}
 			else if(lastPlayerAction.equals("dealerWin")) {bigOlText = "The dealer won! You have lost "+gameOutputs.get(0).get(5)+" chips.";}
 			else  {bigOlText = "It's a tie! Your chips have remained unchanged.";} // just a catch-all I guess????
+			gameboard = gameboard + cardUtils.generateTxt("SplitCount: " + String.valueOf(gameInstance.splitCount), new int[] {0,-30}, "handSubtitle");
+			if(gameInstance.splitCount > 0) {};
 			gameboard = gameboard + drawChipCounter(gameOutputs.get(0).get(1),gameOutputs.get(0).get(5));
 		}
 		else{
@@ -187,8 +191,9 @@ public class BlackjackServlet extends HttpServlet {
 	
 	private String gimmeCardsHandsw(ArrayList<String> playerHand, ArrayList<String> dealerHand, ArrayList<ArrayList<String>> gameOutputs) {
 		String sto = "";
+		String handTotal = gameOutputs.get(0).get(4);
 		sto = sto + drawAHand(playerHand, new int[] {40,180}, new int[] {110,0});
-		sto = sto + cardUtils.generateTxt("Your hand (" + gameOutputs.get(0).get(4)+")", new int[] {50,300}, "handSubtitle");
+		sto = sto + cardUtils.generateTxt("Your hand (" + handTotal +")", new int[] {50,300}, "handSubtitle");
 		sto = sto + drawAHand(dealerHand, new int[] {40,400}, new int[] {110,0});
 		sto = sto + cardUtils.generateTxt("Dealer's hand (" + gameOutputs.get(0).get(3)+")", new int[] {50,520}, "handSubtitle");
 		sto = sto + drawButtons(gameOutputs.get(1),new int[] {5,5}, new int[] {90,0});

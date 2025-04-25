@@ -16,7 +16,7 @@ public class BlackjackGame2{
     private String gameState = "reset"; 
     private String lastPlayerAction = "none";
     //private CardUtils cardUtils = new CardUtils();
-    private int splitCount = 0;
+    public int splitCount = 0;
     public int testMode = 0;
     /** GAME STATE
      * Since the game needs to return after every player interaction, we need to keep track of what part of the game we are in.
@@ -99,6 +99,12 @@ public class BlackjackGame2{
         this.splitCount = 0;
     }
     
+    public void printArr(String[] arlsstr) {
+    	for(int i = 0; i < arlsstr.length; i++){
+		      if(arlsstr[i]!= null){System.out.println("  GAME: [" + String.valueOf(i) + "] = " + arlsstr[i] );}
+		    }
+     }
+    
     public ArrayList<ArrayList<String>> runGameLogic(String lastAction, String lastTarget, String auxInputs[]){
         System.out.println(" GAME: inputs are "+lastAction + " & " + lastTarget +".");
     	ArrayList<ArrayList<String>> outputs = new ArrayList<ArrayList<String>>();
@@ -161,9 +167,13 @@ public class BlackjackGame2{
 			  else if(lastTarget.equals("Split")){
 				  	lastPlayerAction = takePlayerAction("Split");;
 				  }
+			  else if(lastTarget.equals("Swap")){
+				  	lastPlayerAction = takePlayerAction("Swap");;
+				  }
 			  
 			  if(playerHand.getValue(deck) > 21 || lastPlayerAction == "Stand"){
 			    gameStateList = setGameState("resolvePlayer");
+			  	//lastPlayerAction = "none";
 			    gameStateList.add(lastPlayerAction);
 			    gameStateList.add(String.valueOf(dealerHand.getValue(deck)));
 			    gameStateList.add(String.valueOf(playerHand.getValue(deck)));
@@ -211,13 +221,22 @@ public class BlackjackGame2{
 			}
 			else
 			{
+			  splitCount -= 1;
 			  gameStateList = setGameState("choice");
-		      gameStateList.add(String.valueOf(currentBet));
+			  System.out.println(" GAME: Getting secondary hand...");
+			  playerHand = playerReserveHand;
 			  String[] validButtons = getPlayerOptions();
-			  System.out.println(validButtons);
+			  buttonParams = new ArrayList<String>(); // WHY IS THERE A FIVE HERE
 			  for(int i = 0; i < validButtons.length; i++){
+				System.out.println(" GAME: button " + String.valueOf(i) + " = " + validButtons[i]);
 				if(validButtons[i]!= null){buttonParams.add(validButtons[i]);}
 			  }
+			  
+			  gameStateList.add(String.valueOf(dealerHand.getValue(deck)));
+			  gameStateList.add(String.valueOf(playerHand.getValue(deck)));
+		      gameStateList.add(String.valueOf(currentBet));
+		      gameStateList.add(String.valueOf(playerWallet));
+		      
 			}
 		}
 		if(gameState.equals("dealer")){ // NOT supposed to be if else. I pretend to know what I am doing
@@ -257,18 +276,11 @@ public class BlackjackGame2{
     	  gameStateList.add(gameState); // [0][0]
     	  gameStateList.add(String.valueOf(playerWallet)); // [0][1]
 		}
-		ArrayList<String> splitHandOut = new ArrayList<String>(); //[4][1..?]
-		splitHandOut.add(String.valueOf(splitCount)); //[4][0]
-		if(splitCount > 0) {
-			for(int i = 0; i<(playerReserveHand.getCards().size());++i) {
-				splitHandOut.add(playerReserveHand.getCards().get(i));
-			}
-		}
+		
     	outputs.add(gameStateList); // [0]
     	outputs.add(buttonParams); // [1]
     	outputs.add((ArrayList<String>)dealerHand.getCards()); // [2]
     	outputs.add((ArrayList<String>)playerHand.getCards()); // [3]
-    	outputs.add(splitHandOut); //[4]
     	
     	return outputs;
     }
@@ -375,10 +387,12 @@ public class BlackjackGame2{
     private String[] getPlayerOptions(){
         boolean bothCardsMatch = (playerHand.getCards().get(0).split("Of")[0].equals(playerHand.getCards().get(1).split("Of")[0]));
         boolean canDouble = (playerWallet >= currentBet && playerHand.getCards().size() == 2);
-        boolean canSplit = (playerWallet >= currentBet && playerHand.getCards().size() == 2 && bothCardsMatch);
-        String outputs[] = {"Stand","Hit",null,null};
+        boolean canSplit = (playerWallet >= currentBet && playerHand.getCards().size() == 2 && bothCardsMatch && splitCount == 0);
+        boolean canSwap = (splitCount > 0);
+        String outputs[] = {"Stand","Hit",null,null,null};
         if(canDouble){ outputs[2] = "Double";}
         if(canSplit){ outputs[3] = "Split";}
+        if(canSwap){ outputs[4] = "Swap";}
         return outputs;
     }
     
@@ -410,49 +424,18 @@ public class BlackjackGame2{
             splitHand();
             return "Split"; // After splitting, we handle the hands separately (simplified here)
         } 
+        else if (action.equals("Swap")) {
+            //splitHand();
+        	Hand tmpHand = new Hand();
+        	tmpHand = playerHand;
+        	playerHand = playerReserveHand;
+        	playerReserveHand = tmpHand;
+            return "Swap"; // After splitting, we handle the hands separately (simplified here)
+        } 
     return "InvalidAction";
     }
 
-    private void playerActions() {
-        boolean canDouble = playerWallet >= currentBet && playerHand.getCards().size() == 2;
-        boolean canSplit = playerWallet >= currentBet && playerHand.getCards().size() == 2 &&
-                           playerHand.getCards().get(0).split("Of")[0].equals(playerHand.getCards().get(1).split("Of")[0]);
-
-        while (playerHand.getValue(deck) < 21) {
-            System.out.print("Hit (h), Stand (s)");
-            if (canDouble) System.out.print(", Double Down (d)");
-            if (canSplit) System.out.print(", Split (p)");
-            System.out.println("?");
-
-            String action = scanner.next().toLowerCase();
-
-            if (action.equals("h")) {
-                playerHand.addCard(deck.DrawCard());
-                System.out.println("You hit. Your new hand: " + playerHand + " (Value: " + playerHand.getValue(deck) + ")");
-                if (playerHand.getValue(deck) > 21) {
-                    System.out.println("You busted!");
-                    return;
-                }
-            } else if (action.equals("s")) {
-                System.out.println("You stand.");
-                return;
-            } else if (action.equals("d") && canDouble) {
-                playerWallet -= currentBet;
-                currentBet *= 2;
-                playerHand.addCard(deck.DrawCard());
-                System.out.println("You double down. Your final hand: " + playerHand + " (Value: " + playerHand.getValue(deck) + ")");
-                if (playerHand.getValue(deck) > 21) {
-                    System.out.println("You busted!");
-                }
-                return;
-            } else if (action.equals("p") && canSplit) {
-                splitHand();
-                return; // After splitting, we handle the hands separately (simplified here)
-            } else {
-                System.out.println("Invalid action.");
-            }
-        }
-    }
+    private void playerActions() {}
 
     private void splitHand() {
         if (playerHand.getCards().size() == 2 &&
@@ -469,52 +452,6 @@ public class BlackjackGame2{
             playerHand = hand1;
             splitCount += 1;
             System.out.println("  GAME: Splitting hands...");
-
-            // Play hand 1
-            /*System.out.println("\nHand 1:");
-            hand1.addCard(deck.DrawCard());
-            System.out.println("Hand 1: " + hand1 + " (Value: " + hand1.getValue(deck) + ")");
-            while (hand1.getValue(deck) < 21) {
-                System.out.println("Hit (h) or Stand (s) for Hand 1?");
-                String action = scanner.next().toLowerCase();
-                if (action.equals("h")) {
-                    hand1.addCard(deck.DrawCard());
-                    System.out.println("Hand 1: " + hand1 + " (Value: " + hand1.getValue(deck) + ")");
-                    if (hand1.getValue(deck) > 21) {
-                        System.out.println("Hand 1 busted!");
-                        return;
-                    }
-                } else if (action.equals("s")) {
-                    return;
-                } else {
-                    System.out.println("Invalid action.");
-                }
-            }
-            determineSplitWinner(hand1, dealerHand, currentBet);*/
-
-            // Play hand 2
-            /*
-            System.out.println("\nHand 2:");
-            hand2.addCard(deck.DrawCard());
-            System.out.println("Hand 2: " + hand2 + " (Value: " + hand2.getValue(deck) + ")");
-            while (hand2.getValue(deck) < 21) {
-                System.out.println("Hit (h) or Stand (s) for Hand 2?");
-                String action = scanner.next().toLowerCase();
-                if (action.equals("h")) {
-                    hand2.addCard(deck.DrawCard());
-                    System.out.println("Hand 2: " + hand2 + " (Value: " + hand2.getValue(deck) + ")");
-                    if (hand2.getValue(deck) > 21) {
-                        System.out.println("Hand 2 busted!");
-                        return;
-                    }
-                } else if (action.equals("s")) {
-                    return;
-                } else {
-                    System.out.println("Invalid action.");
-                }
-            }
-            determineSplitWinner(hand2, dealerHand, currentBet);
-            */
         } else {
             System.out.println("Cannot split hand.");
         }
@@ -539,29 +476,7 @@ public class BlackjackGame2{
     }
 
     private String determineWinner(int bet) {
-        int playerValue = playerHand.getValue(deck);
-        int dealerValue = dealerHand.getValue(deck);
-
-        if (playerValue > 21) {
-            System.out.println("Dealer wins!");
-            playerWallet -= bet;
-            return "dealerWin";
-        } else if (dealerValue > 21) {
-            System.out.println("You win!");
-            playerWallet += bet;
-            return "playerWin";
-        } else if (playerValue > dealerValue) {
-            System.out.println("You win!");
-            playerWallet += bet;
-            return "playerWin";
-        } else if (dealerValue > playerValue) {
-            System.out.println("Dealer wins!");
-            playerWallet -= bet;
-            return "dealerWin";
-        } else {
-            System.out.println("It's a push!");
-            return "push";
-        }
+    	return null;
     }
 
     private void determineSplitWinner(Hand playerHand, Hand dealerHand, int bet) {
