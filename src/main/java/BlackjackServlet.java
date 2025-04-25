@@ -106,8 +106,8 @@ public class BlackjackServlet extends HttpServlet {
 			gameboard = gameboard + ("<form method='GET'>\r\n"
 					+ "<input type=\"hidden\" name=\"check\" value=\""+inputCheck+"\" />"
 					+ "<input type=\"hidden\" name=\"choice\" value=\"submit\" />"
-					+ "<input type=\"number\" name=\"betAmount\" min=\""+minBet+"\"  max=\""+maxBet+"\" value=\"5\" font-size=\"30px\" required >\r\n"
-					+ "<input type=\"submit\" value=\"Confirm Bet\">\r\n"
+					+ "<input type=\"number\" name=\"betAmount\" style = 'padding: 2px; border-radius:8px; border-style: outset; border-color: #a7d781;' min=\""+minBet+"\"  max=\""+maxBet+"\" value=\"5\" font-size=\"30px\" required >\r\n"
+					+ "<input type=\"submit\" value=\"Confirm Bet\" style = 'padding: 2px; border-radius:8px; border-style: outset; border-color: #a7d781;'>\r\n"
 					+ "</form>");
 			//gameboard = gameboard + cardUtils.generateTxt("Hi I couldn't kinda forgot how to <br> make the spinbox bigger so <br> it's just going to be up here okay?", new int[] {10,40}, "linkLarge");
 			gameboard = gameboard + drawChipCounter(gameOutputs.get(0).get(1),"???");
@@ -181,8 +181,17 @@ public class BlackjackServlet extends HttpServlet {
 		}
 		return sto;
 	}
-	
-	private String drawButtons(ArrayList<String> buttons, int[] pos, int[] ofset) {
+
+	private String drawButtons(ArrayList<String> buttons, int[] pos, String tableClass) {
+		String sto = "<table style='position:abosulte; left:"+pos[0]+"px; top:"+pos[1]+"px;' class='"+tableClass+"'> <tr> <td>";
+		for(int i = 0; i < buttons.size(); i++) {
+			sto = sto + cardUtils.generateButtonRelative(buttons.get(i),"button",
+					"BlackjackServlet?choice="+buttons.get(i)+"&check="+inputCheck);	// link back with choice & IC update
+			sto = sto + "<td>";
+		}
+		return sto;
+	}
+	private String drawButtonsAbsolute(ArrayList<String> buttons, int[] pos, int[] ofset) {
 		String sto = "";
 		for(int i = 0; i < buttons.size(); i++) {
 			sto = sto +
@@ -199,7 +208,7 @@ public class BlackjackServlet extends HttpServlet {
 		sto = sto + cardUtils.generateTxt("Your hand (" + handTotal +")", new int[] {50,300}, "handSubtitle");
 		sto = sto + drawAHand(dealerHand, new int[] {40,400}, new int[] {110,0});
 		sto = sto + cardUtils.generateTxt("Dealer's hand (" + gameOutputs.get(0).get(3)+")", new int[] {50,520}, "handSubtitle");
-		sto = sto + drawButtons(gameOutputs.get(1),new int[] {5,5}, new int[] {90,0});
+		sto = sto + drawButtons(gameOutputs.get(1),new int[] {5,5},"button");
 	return sto;
 	}
 	
