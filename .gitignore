@@ -1,4 +1,1 @@
-build/classes
-build/
-build/*
-*.class
+build/*.class
