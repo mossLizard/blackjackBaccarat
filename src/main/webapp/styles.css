@@ -1,0 +1,81 @@
+@charset "ISO-8859-1";
+body {
+    background-image: url('https://d1csarkz8obe9u.cloudfront.net/posterpreviews/powerpoint-casino-gambling-background-design-template-79b0c4c7014ffbba1bfbc8192d9f0b75_screen.jpg?ts=1696883627');
+    background-size: cover;
+    font-family: Arial, sans-serif;
+    color: #fff;
+   }
+
+   .container {
+       text-align: center;
+       padding: 50px;
+   }
+
+   .game-link, .instructions-link, .back-link {
+       display: inline-block;
+       background-color: #FFD700;
+       color: black;
+       padding: 15px 32px;
+       text-align: center;
+       font-size: 16px;
+       margin: 4px 2px;
+       cursor: pointer;
+       border: none;
+       border-radius: 4px;
+       text-decoration: none;
+   }
+
+   .instructions-content {
+       background-color: rgba(0, 0, 0, 0.8);
+       padding: 20px;
+       border-radius: 10px;
+       color: #fff;
+   }
+   
+   
+div.gameContainer {
+	background-color:#336600;
+	border:4px;
+	border-color: #a7d781;
+	border-style: inset;
+	padding: 4px;
+    position:relative;
+    left:20px;
+    top:10px;
+    height:600px;
+    width:600px;
+}
+
+
+div.handSubtitle{
+	font-family: "Garamond", "Times New Roman", serif;
+	font-size: 30px;
+	color:#a7d781;
+}
+
+div.winText{
+	font-family: "Lucida Handwriting";
+	font-size: 50px;
+}
+span.button{
+	background-color:#80bf5e;
+	border:4px;
+	border-color: #a7d781;
+	border-style: inset;
+	padding: 4px;
+	font-family: "Garamond", "Times New Roman", serif;
+	font-size: 20px;
+}
+div.bigOlText{
+	font-size: 30px;
+	width:450px;
+}
+
+img.card {
+	transform:scale(2,2);
+	image-rendering: crisp-edges;
+}
+img.doubleScale{
+	transform:scale(2,2);
+	image-rendering: crisp-edges;
+}

@@ -1,0 +1,48 @@
+@charset "ISO-8859-1";
+h1{
+	font-family: "Lucida Calligraphy","Lucida Handwriting";
+}
+span{
+	font-family: "Garamond", "Times New Roman", serif;
+}
+mono{
+	font-family: "Lucida Console", "Courier New", monospace;
+}
+div.gameContainer {
+	background-color:#336600;
+	border:4px;
+	border-color: #a7d781;
+	border-style: inset;
+	padding: 4px;
+    position:relative;
+    left:20px;
+    top:10px;
+    height:650px;
+}
+
+div.handSubtitle{
+	font-family: "Garamond", "Times New Roman", serif;
+	font-size: 30px;
+	color:#a7d781;
+}
+
+div.winText{
+	font-family: "Lucida Handwriting";
+	font-size: 50px;
+}
+div.linkLarge{
+	font-family: "Garamond", "Times New Roman", serif;
+	font-size: 20px;
+}
+div.mono{
+	font-family: "Lucida Console", "Courier New", monospace;
+}
+
+img.card {
+	transform:scale(2,2);
+	image-rendering: crisp-edges;
+}
+img.cardFrame{
+	transform:scale(2,2);
+	image-rendering: crisp-edges;
+}

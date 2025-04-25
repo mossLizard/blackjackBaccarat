@@ -1,0 +1,7 @@
+@charset "ISO-8859-1";
+  .gameContainer {
+    background-color:#71ff71ff;
+    position:relative;
+    width:"600px";
+    height:"400px";
+  }

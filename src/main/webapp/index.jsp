@@ -1,0 +1,28 @@
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Card Games</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to the Casino</h1>
+        <div class="game">
+            <h2>Blackjack</h2>
+            <a href="BlackjackServlet" class="game-link">Play Blackjack</a>
+            <a href="instructions.jsp?game=blackjack" class="instructions-link">How to Play</a>
+        </div>
+        <div class="game">
+            <h2>Baccarat</h2>
+            <a href="BaccaratServlet" class="game-link">Play Baccarat</a>
+            <a href="instructions.jsp?game=baccarat" class="instructions-link">How to Play</a>
+        </div>
+    </div>
+</body>
+</html>
+
+</html>
