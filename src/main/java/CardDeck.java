@@ -12,16 +12,18 @@ public class CardDeck
     private static final String[] UNIQUE_CARDS = {"Blank","Hidden"};
     private int CardValue;  
     private List<Integer> CardValues;
-    private Random Random;
     
  
         public CardDeck() {
         this.Deck = new ArrayList<>(); 
         this.CardValues = new ArrayList<>(); 
-        this.Random = new Random();
         CreateDeck(1); 
         ShuffleDeck();
     } 
+        
+    	private int rand(int maxRand) {
+    		return(int)((Math.random()*maxRand));
+    	}
     
     public void CreateDeck(int numberOfDecks) { // Modified to match TestGame's signature
         for (int d = 0; d < numberOfDecks; d++) {
@@ -72,7 +74,7 @@ public class CardDeck
         if (Deck.isEmpty()) {
             return null; // Deck is empty
         }
-        int RandomIndex = Random.nextInt(Deck.size());
+        int RandomIndex = rand(Deck.size());
         String DrawnCard = Deck.remove(RandomIndex);
         // We are not directly using CardValues here in the drawCard method
         return DrawnCard;
