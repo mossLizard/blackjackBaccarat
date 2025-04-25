@@ -234,7 +234,7 @@ public class CardUtils {
     	return sto;
     }
     public String generateButtonRelative(String text, String buttonClass, String link) {
-    	String sto = "<a href = "+link+"> <span"
+    	String sto = "<a href = "+link+"> <span "
     				+ "class = "+buttonClass+">"
     			+ "<b>" + text + "</b>"
     			+ "</span> </a>";

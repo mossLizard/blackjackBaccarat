@@ -152,7 +152,7 @@ public class BlackjackServlet extends HttpServlet {
 			else if(lastPlayerAction.equals("playerWin")) {bigOlText = "You have won! You have gained "+gameOutputs.get(0).get(5)+" chips.";}
 			else if(lastPlayerAction.equals("dealerWin")) {bigOlText = "The dealer won! You have lost "+gameOutputs.get(0).get(5)+" chips.";}
 			else  {bigOlText = "It's a tie! Your chips have remained unchanged.";} // just a catch-all I guess????
-			gameboard = gameboard + cardUtils.generateTxt("SplitCount: " + String.valueOf(gameInstance.splitCount), new int[] {0,-30}, "handSubtitle");
+			//gameboard = gameboard + cardUtils.generateTxt("SplitCount: " + String.valueOf(gameInstance.splitCount), new int[] {0,-30}, "handSubtitle");
 			if(gameInstance.splitCount > 0) {};
 			gameboard = gameboard + drawChipCounter(gameOutputs.get(0).get(1),gameOutputs.get(0).get(5));
 		}
@@ -183,12 +183,15 @@ public class BlackjackServlet extends HttpServlet {
 	}
 
 	private String drawButtons(ArrayList<String> buttons, int[] pos, String tableClass) {
-		String sto = "<table style='position:abosulte; left:"+pos[0]+"px; top:"+pos[1]+"px;' class='"+tableClass+"'> <tr> <td>";
+		String sto = "<table style='position:abosulte; left:"+pos[0]+"px; top:"+pos[1]+"px;' class='"+tableClass+"'> <tr>";
 		for(int i = 0; i < buttons.size(); i++) {
-			sto = sto + cardUtils.generateButtonRelative(buttons.get(i),"button",
-					"BlackjackServlet?choice="+buttons.get(i)+"&check="+inputCheck);	// link back with choice & IC update
-			sto = sto + "<td>";
+			sto = sto + "<td class='"+tableClass+"'>" + cardUtils.generateButtonRelative(buttons.get(i),"button",
+					"BlackjackServlet?choice="+buttons.get(i)+"&check="+inputCheck)+ " </td>";	// link back with choice & IC update
 		}
+		if(gameInstance.splitCount > 0) {
+			sto = sto + "<td><div class = 'button'> You have a split hand! </div> </td>";
+		}
+		sto = sto + "</tr> </table>";
 		return sto;
 	}
 	private String drawButtonsAbsolute(ArrayList<String> buttons, int[] pos, int[] ofset) {
@@ -208,7 +211,7 @@ public class BlackjackServlet extends HttpServlet {
 		sto = sto + cardUtils.generateTxt("Your hand (" + handTotal +")", new int[] {50,300}, "handSubtitle");
 		sto = sto + drawAHand(dealerHand, new int[] {40,400}, new int[] {110,0});
 		sto = sto + cardUtils.generateTxt("Dealer's hand (" + gameOutputs.get(0).get(3)+")", new int[] {50,520}, "handSubtitle");
-		sto = sto + drawButtons(gameOutputs.get(1),new int[] {5,5},"button");
+		sto = sto + drawButtons(gameOutputs.get(1),new int[] {0,0},"buttonFrame");
 	return sto;
 	}
 	

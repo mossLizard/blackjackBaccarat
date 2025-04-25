@@ -183,6 +183,7 @@ public class BaccaratDisplay2 extends HttpServlet {
 		return sto;
 	}
 	
+
 	private String gimmeCardsHandsw(ArrayList<String> playerHand, ArrayList<String> dealerHand, ArrayList<ArrayList<String>> gameOutputs) {
 		String sto = "";
 		sto = sto + drawAHand(playerHand, new int[] {40,180}, new int[] {110,0});
