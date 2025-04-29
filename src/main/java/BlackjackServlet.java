@@ -1,5 +1,3 @@
-
-
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -8,7 +6,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 /**
  * Servlet implementation class BlackjackServlet
@@ -20,7 +17,6 @@ public class BlackjackServlet extends HttpServlet {
     
     public BlackjackGame2 gameInstance = new BlackjackGame2(200);
     private CardUtils cardUtils = new CardUtils("/CardGame_1"); // CHANGE THIS IF YOU SWITCH PROJECT NAME
-    private String displayName = "TestGameDisplay";
     
     public boolean doInit = true;
     public int inputCheck = 0;
@@ -31,7 +27,7 @@ public class BlackjackServlet extends HttpServlet {
     // technically this will fail if the user refreshes an absurd number of times but at that point you deserve the single frame of interaction.
     
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String ctxtPath = request.getContextPath();
+		//String ctxtPath = request.getContextPath();
 		PrintWriter out = response.getWriter(); // basics
 		String header = "<head>\r\n"
 				+ "    <meta charset=\"ISO-8859-1\">\r\n"
@@ -106,8 +102,8 @@ public class BlackjackServlet extends HttpServlet {
 			gameboard = gameboard + ("<form method='GET'>\r\n"
 					+ "<input type=\"hidden\" name=\"check\" value=\""+inputCheck+"\" />"
 					+ "<input type=\"hidden\" name=\"choice\" value=\"submit\" />"
-					+ "<input type=\"number\" name=\"betAmount\" min=\""+minBet+"\"  max=\""+maxBet+"\" value=\"5\" font-size=\"30px\" required >\r\n"
-					+ "<input type=\"submit\" value=\"Confirm Bet\">\r\n"
+					+ "<input type=\"number\" name=\"betAmount\" style = 'padding: 2px; border-radius:8px; border-style: outset; border-color: #a7d781;' min=\""+minBet+"\"  max=\""+maxBet+"\" value=\"5\" font-size=\"30px\" required >\r\n"
+					+ "<input type=\"submit\" value=\"Confirm Bet\" style = 'padding: 2px; border-radius:8px; border-style: outset; border-color: #a7d781;'>\r\n"
 					+ "</form>");
 			//gameboard = gameboard + cardUtils.generateTxt("Hi I couldn't kinda forgot how to <br> make the spinbox bigger so <br> it's just going to be up here okay?", new int[] {10,40}, "linkLarge");
 			gameboard = gameboard + drawChipCounter(gameOutputs.get(0).get(1),"???");
@@ -152,7 +148,7 @@ public class BlackjackServlet extends HttpServlet {
 			else if(lastPlayerAction.equals("playerWin")) {bigOlText = "You have won! You have gained "+gameOutputs.get(0).get(5)+" chips.";}
 			else if(lastPlayerAction.equals("dealerWin")) {bigOlText = "The dealer won! You have lost "+gameOutputs.get(0).get(5)+" chips.";}
 			else  {bigOlText = "It's a tie! Your chips have remained unchanged.";} // just a catch-all I guess????
-			gameboard = gameboard + cardUtils.generateTxt("SplitCount: " + String.valueOf(gameInstance.splitCount), new int[] {0,-30}, "handSubtitle");
+			//gameboard = gameboard + cardUtils.generateTxt("SplitCount: " + String.valueOf(gameInstance.splitCount), new int[] {0,-30}, "handSubtitle");
 			if(gameInstance.splitCount > 0) {};
 			gameboard = gameboard + drawChipCounter(gameOutputs.get(0).get(1),gameOutputs.get(0).get(5));
 		}
@@ -181,8 +177,21 @@ public class BlackjackServlet extends HttpServlet {
 		}
 		return sto;
 	}
-	
-	private String drawButtons(ArrayList<String> buttons, int[] pos, int[] ofset) {
+
+	private String drawButtons(ArrayList<String> buttons, int[] pos, String tableClass) {
+		String sto = "<table style='position:abosulte; left:"+pos[0]+"px; top:"+pos[1]+"px;' class='"+tableClass+"'> <tr>";
+		for(int i = 0; i < buttons.size(); i++) {
+			sto = sto + "<td class='"+tableClass+"'>" + cardUtils.generateButtonRelative(buttons.get(i),"button",
+					"BlackjackServlet?choice="+buttons.get(i)+"&check="+inputCheck)+ " </td>";	// link back with choice & IC update
+		}
+		if(gameInstance.splitCount > 0) {
+			sto = sto + "<td><div class = 'button'> You have a split hand! </div> </td>";
+		}
+		sto = sto + "</tr> </table>";
+		return sto;
+	}
+	@SuppressWarnings("unused")
+	private String drawButtonsAbsolute(ArrayList<String> buttons, int[] pos, int[] ofset) {
 		String sto = "";
 		for(int i = 0; i < buttons.size(); i++) {
 			sto = sto +
@@ -199,7 +208,7 @@ public class BlackjackServlet extends HttpServlet {
 		sto = sto + cardUtils.generateTxt("Your hand (" + handTotal +")", new int[] {50,300}, "handSubtitle");
 		sto = sto + drawAHand(dealerHand, new int[] {40,400}, new int[] {110,0});
 		sto = sto + cardUtils.generateTxt("Dealer's hand (" + gameOutputs.get(0).get(3)+")", new int[] {50,520}, "handSubtitle");
-		sto = sto + drawButtons(gameOutputs.get(1),new int[] {5,5}, new int[] {90,0});
+		sto = sto + drawButtons(gameOutputs.get(1),new int[] {0,0},"buttonFrame");
 	return sto;
 	}
 	

@@ -1,10 +1,8 @@
 import java.util.ArrayList;
-import java.util.Random;
 
 
 public class CardUtils {
 	
-	private static Random rand = new Random();
 	public String context = "PROJECT_NAME_GOES_HERE";
 	
 	public final String[] VALID_NUMBERS = {"Ace","Two","Three","Four","Five","Six","Seven","Eight","Nine","Ten","Jack","Queen","King"};
@@ -48,14 +46,17 @@ public class CardUtils {
 		return sto;
 	}
 
+	private int rand(int maxRand) {
+		return(int)((Math.random()*maxRand));
+	}
+	
+	
 	/**
 	 * Returns a shuffled copy of the arrayList. Hopefully. It's late and I don't really want to test it so just trust.
 	 */
 	public ArrayList<String> shuffle(ArrayList<String> deck){
 		ArrayList<String> newDeck = new ArrayList<String>();
-		Random tmpRand = new Random();
 		for(int i = 0; i < deck.size(); i++) {
-			newDeck.add(tmpRand.nextInt(newDeck.size()), deck.get(i));
 		}
 		return newDeck;
 	}
@@ -173,7 +174,7 @@ public class CardUtils {
     	String sto = "";
     	String prefixes[] = {"Ace","Two","Three","Four","Five","Six","Seven","Eight","Nine","Ten","Jack","Queen","King"};
     	String suffixes[] = {"Spades","Clubs","Hearts","Diamonds"};
-    	sto = prefixes[rand.nextInt(prefixes.length)] + "Of" + suffixes[rand.nextInt(suffixes.length)];
+    	sto = prefixes[rand(prefixes.length)] + "Of" + suffixes[rand(suffixes.length)];
     	return sto;
     }
     /** 
@@ -228,6 +229,13 @@ public class CardUtils {
     				+ "top: "  +uiPosition[1]+"px;"
     				+"' "
     				+ "class = "+style+">"
+    			+ "<b>" + text + "</b>"
+    			+ "</span> </a>";
+    	return sto;
+    }
+    public String generateButtonRelative(String text, String buttonClass, String link) {
+    	String sto = "<a href = "+link+"> <span "
+    				+ "class = "+buttonClass+">"
     			+ "<b>" + text + "</b>"
     			+ "</span> </a>";
     	return sto;
