@@ -6,7 +6,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 /**
  * Servlet implementation class BlackjackServlet
@@ -18,7 +17,6 @@ public class BlackjackServlet extends HttpServlet {
     
     public BlackjackGame2 gameInstance = new BlackjackGame2(200);
     private CardUtils cardUtils = new CardUtils("/CardGame_1"); // CHANGE THIS IF YOU SWITCH PROJECT NAME
-    private String displayName = "TestGameDisplay";
     
     public boolean doInit = true;
     public int inputCheck = 0;
@@ -29,7 +27,7 @@ public class BlackjackServlet extends HttpServlet {
     // technically this will fail if the user refreshes an absurd number of times but at that point you deserve the single frame of interaction.
     
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String ctxtPath = request.getContextPath();
+		//String ctxtPath = request.getContextPath();
 		PrintWriter out = response.getWriter(); // basics
 		String header = "<head>\r\n"
 				+ "    <meta charset=\"ISO-8859-1\">\r\n"
@@ -192,6 +190,7 @@ public class BlackjackServlet extends HttpServlet {
 		sto = sto + "</tr> </table>";
 		return sto;
 	}
+	@SuppressWarnings("unused")
 	private String drawButtonsAbsolute(ArrayList<String> buttons, int[] pos, int[] ofset) {
 		String sto = "";
 		for(int i = 0; i < buttons.size(); i++) {

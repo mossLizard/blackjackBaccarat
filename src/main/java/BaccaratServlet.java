@@ -12,15 +12,13 @@ public class BaccaratServlet extends HttpServlet {
    private static final long serialVersionUID = 1L;
    private CardUtils cardUtils = new CardUtils("/CardGame_1");
    private Baccarat2 gameInstance = new Baccarat2();
-   private int cardCount = 2;
-   private boolean doSetup = true;
    public boolean doInit = true;
    public int inputCheck = 0;
    public String gameState;
    
    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
      System.out.println("");
-     String ctxtPath = request.getContextPath();
+     //String ctxtPath = request.getContextPath();
 	 PrintWriter out = response.getWriter(); // basics
      if(doInit) { // just started
 	   doInit = false;
@@ -81,7 +79,7 @@ public class BaccaratServlet extends HttpServlet {
       
 		String gameboard = "";
 		String bigOlText = "";
-		String lilText = "";
+		//String lilText = "";
 		int gameWindowHeight = 650;
 		//gameboard = gameboard + gimmeCardsHandsw(playerHand, dealerHand, gameOutputs);
 		
