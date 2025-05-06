@@ -1,5 +1,2 @@
-# blackjackbaccarat
-# blackjackbaccarat
-# blackjackbaccarat
-# blackjackBaccarat
-<a href='src/main/webapp/index.jsp'> beep </a>
+<a href='src/main/webapp/index.html'> beep </a>
+<a href='index.html'> beep2 </a>
